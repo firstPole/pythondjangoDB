@@ -1,4 +1,5 @@
 from django.shortcuts import render
+import sys
 
 from .models import Flight
 # Create your views here.
@@ -7,7 +8,12 @@ def index(request):
         "flights": Flight.objects.all()
     })
 def flight(request,flight_id):
-    flt = Flight.objects.get(id=flight_id)
+    try:
+        flight = Flight.objects.get(id=flight_id)
+    except:
+        print("No such flights present!")
+        sys.exit(1)
     return render(request,"flights/flight.html",{
-        "flight" : flt
+        "flight" : flight,
+        "passengers": flight.passengers.all()
     })
